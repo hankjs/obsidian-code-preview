@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "paths": {},
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "module": "ESNext",
+        "target": "ES6",
+        "allowJs": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "isolatedModules": true,
+        "composite": true,
+        "lib": [
+            "DOM",
+            "ES5",
+            "ES6",
+            "ES7"
+        ],
+        "types": [
+            "moment",
+            "node"
+        ]
+    },
+    "include": [
+        "src/**/*.ts",
+		"@types/*.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "packages"
+    ],
+    "vueCompilerOptions": {
+        "experimentalDisableTemplateSupport": true
+    }
+}

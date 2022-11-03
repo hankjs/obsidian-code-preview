@@ -1,0 +1,22 @@
+{
+    "extends": "../tsconfig.json",
+    "references": [
+        {
+            "name": "obsidian-code-preview",
+            "path": ".."
+        }
+    ],
+    "compilerOptions": {
+        "types": [
+            "jest",
+			"node"
+        ],
+		"rootDir": ".",
+        "isolatedModules": false,
+        "noEmit": true
+    },
+    "include": [
+        ".",
+		"../src"
+    ]
+}
