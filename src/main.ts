@@ -42,12 +42,10 @@ export default class extends SettingPlugin {
 		registered.sortOrder = priority;
 	}
 
-	public async preview(
-		source: string,
-		el: HTMLElement,
-		component: Component | MarkdownPostProcessorContext,
-		sourcePath: string
-	) {
+	/**
+	 * code
+	 */
+	public async code(source: string, sourcePath?: string) {
 		let code = '';
 		let language = '';
 		try {
@@ -68,6 +66,19 @@ export default class extends SettingPlugin {
 			}
 		}
 
+		return {
+			code,
+			language
+		};
+	}
+
+	public async preview(
+		source: string,
+		el: HTMLElement,
+		component: Component | MarkdownPostProcessorContext,
+		sourcePath: string
+	) {
+		const { code, language } = await this.code(source, sourcePath);
 		MarkdownRenderer.renderMarkdown(
 			wrapCodeBlock(language, code),
 			el,
