@@ -17,6 +17,7 @@ tsconfig.tsbuildinfo
 *.map
 
 # obsidian
+main.js
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
