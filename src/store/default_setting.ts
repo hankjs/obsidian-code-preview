@@ -1,4 +1,4 @@
-import { EspansoPlugin, Settings } from "src/obsidian_vue.type";
+import { CodePreviewPlugin, Settings } from "src/obsidian_vue.type";
 import log from "src/utils/log";
 
 class SettingStore {

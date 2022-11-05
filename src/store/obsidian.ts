@@ -1,6 +1,6 @@
 import { App, prepareFuzzySearch, TAbstractFile, TFile } from "obsidian";
 
-import { Page, EspansoPlugin, YamlConfig } from "src/obsidian_vue.type";
+import { Page, CodePreviewPlugin, YamlConfig } from "src/obsidian_vue.type";
 import { cachedRead } from "src/utils/vault";
 import { resolveObsidianPath } from "src/utils/path";
 import { useSettingStore } from ".";
@@ -14,23 +14,23 @@ const searchPreviewAnnotation = prepareFuzzySearch("%%preview %%");
 
 export interface ObsidianState {
 	app: App;
-	plugin: EspansoPlugin;
+	plugin: CodePreviewPlugin;
 	vaultBasePath: string;
 	pageMap: Map<string, Page>;
 }
 
 class ObsidianStore {
 	app: App = null as any;
-	plugin: EspansoPlugin = null as any;
+	plugin: CodePreviewPlugin = null as any;
 	vaultBasePath: string = null as any;
 	pageMap: Map<string, Page> = new Map();
 	resolveCount = 0;
 
-	constructor(plugin: EspansoPlugin) {
+	constructor(plugin: CodePreviewPlugin) {
 		this.init(plugin);
 	}
 
-	init(plugin: EspansoPlugin) {
+	init(plugin: CodePreviewPlugin) {
 		if (plugin === this.plugin) {
 			return;
 		}
@@ -177,7 +177,7 @@ class ObsidianStore {
 }
 
 let store: ObsidianStore = null as any;
-export const useObsidianStore = (plugin?: EspansoPlugin) => {
+export const useObsidianStore = (plugin?: CodePreviewPlugin) => {
 
 	if (store) {
 		return store;

@@ -1,5 +1,5 @@
 import { PluginSettingTab } from "obsidian";
-import { EspansoPlugin, Settings } from "src/obsidian_vue.type";
+import { CodePreviewPlugin, Settings } from "src/obsidian_vue.type";
 import { SettingsManager } from "./SettingsManager";
 
 export interface SettingsManagerConfig {
@@ -7,10 +7,10 @@ export interface SettingsManagerConfig {
 }
 
 export class SettingsTab extends PluginSettingTab {
-  plugin: EspansoPlugin;
+  plugin: CodePreviewPlugin;
   settingsManager: SettingsManager;
 
-  constructor(plugin: EspansoPlugin, config: SettingsManagerConfig) {
+  constructor(plugin: CodePreviewPlugin, config: SettingsManagerConfig) {
     super(plugin.app, plugin);
     this.plugin = plugin;
     this.settingsManager = new SettingsManager(plugin, config, plugin.settings);

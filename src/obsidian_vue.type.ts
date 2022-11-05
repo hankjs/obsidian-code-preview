@@ -1,6 +1,7 @@
 import { CachedMetadata, FileStats, Plugin } from "obsidian";
 
 export interface Settings {
+	alias: Record<string, string>
 }
 
 export interface YamlConfig {
@@ -31,4 +32,4 @@ export interface ISetting {
 	saveSettings: () => any;
 }
 
-export type EspansoPlugin = Plugin & ISetting;
+export type CodePreviewPlugin = Plugin & ISetting;

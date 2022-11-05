@@ -50,6 +50,7 @@ export default class extends SettingPlugin {
 		let language = '';
 		try {
 			const codeSetting = parseYaml(source);
+			console.log("codeSetting", codeSetting);
 			const path = codeSetting?.path || codeSetting?.link;
 			const filePath = resolve(path, sourcePath);
 
