@@ -1,11 +1,6 @@
 import { CachedMetadata, FileStats, Plugin } from "obsidian";
 
 export interface Settings {
-	espansoTags: string[];
-	espansoConfigPath: string;
-
-	labelStart: string;
-	labelEnd: string;
 }
 
 export interface YamlConfig {

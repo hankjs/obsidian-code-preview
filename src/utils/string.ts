@@ -28,26 +28,9 @@ export function parsePreviewYaml(contents: string, pagePath: string) {
 	const { settings } = useSettingStore();
 	const previewBlockList = contents.match(/```preview(.|\s)*?```/g) as string[];
 	if (!previewBlockList || previewBlockList.length === 0) {
-		return {
-			label: '',
-			configList: []
-		};
+		return [];
 	}
 
-	// get espanso label
-	const labelWrapReg = new RegExp(
-		`${settings.labelStart}(.|\\s)*?(${settings.labelEnd})`
-	);
-	const labelWrapClearReg = new RegExp(
-		`(${settings.labelStart})|${settings.labelEnd}`,
-		"g"
-	);
-	const labelWrap = contents.match(labelWrapReg);
-	const label = labelWrap
-		? labelWrap[0].replace(labelWrapClearReg, "").trim()
-		: path.parse(pagePath).name;
-
-	// get espanso code yaml
 	const configList = previewBlockList.map(source => parseYaml(trimPreviewWrap(source)))
 		.filter(config => {
 			try {
@@ -58,8 +41,5 @@ export function parsePreviewYaml(contents: string, pagePath: string) {
 			}
 		});
 
-	return {
-		label,
-		configList
-	};
+	return configList;
 }

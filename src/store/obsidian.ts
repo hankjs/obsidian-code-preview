@@ -1,10 +1,8 @@
-import { App, fuzzySearch, getAllTags, parseYaml, prepareFuzzySearch, TAbstractFile, TFile } from "obsidian";
-import * as path from "path";
+import { App, prepareFuzzySearch, TAbstractFile, TFile } from "obsidian";
 
 import { Page, EspansoPlugin, YamlConfig } from "src/obsidian_vue.type";
 import { cachedRead } from "src/utils/vault";
-import { resolve, resolveObsidianPath } from "src/utils/path";
-import { generateConfigFile } from "src/utils/espanso";
+import { resolveObsidianPath } from "src/utils/path";
 import { useSettingStore } from ".";
 import log from "src/utils/log";
 import { APP_NAME } from "src/default_settings";
@@ -49,7 +47,7 @@ class ObsidianStore {
 
 		plugin.registerEvent(
 			this.app.metadataCache.on("resolved", () =>
-				this.generateEspansoConfigFile(Object.keys(this.app.metadataCache.resolvedLinks).length)
+				this.checkResolved(Object.keys(this.app.metadataCache.resolvedLinks).length)
 			)
 		);
 
@@ -64,7 +62,7 @@ class ObsidianStore {
 				this.onVaultRename(file, oldPath)
 			)
 		);
-		console.log(`Obsidian ${APP_NAME} loaded`);
+		console.log(`Obsidian ${APP_NAME} init`);
 	}
 
 	onVaultDelete(file: TAbstractFile) {
@@ -73,7 +71,6 @@ class ObsidianStore {
 		}
 		this.pageMap.delete(file.path);
 		this.resolveCount--;
-		generateConfigFile();
 	}
 
 	onVaultRename(file: TAbstractFile, oldPath: string) {
@@ -85,40 +82,15 @@ class ObsidianStore {
 	}
 
 	async onMetadataCacheResolve(file: TFile) {
-		const { settings } = useSettingStore();
 		const page = await cachedRead(file);
 		let configList = [];
-		let label = "";
 		try {
-			const result = parsePreviewYaml(page.contents, page.path);
-			label = result.label;
-			configList = result.configList;
+			configList = parsePreviewYaml(page.contents, page.path);
 		} catch (error) {
 			this.addCache(page);
-			return
-		}
-		configList.length > 0 && this.pageMap.set(page.path, page);
-		await this.generatePreviewLinks(page, configList);
-
-		// check tags need espanso
-		const tags = getAllTags(page.metadata);
-		if (!tags?.some((tag) => settings.espansoTags.includes(tag))) {
-			this.addCache(page);
 			return;
 		}
-
-		const [firstConfig] = configList;
-		if (!firstConfig) {
-			this.addCache(page);
-			return;
-		}
-
-		// init page snippet property
-		page.enableEspanso = !!firstConfig.trigger;
-		page.snippetLabel = label;
-		page.snippetTrigger = firstConfig.trigger;
-		page.snippetPath = resolve(firstConfig.path || firstConfig.link, page.path);
-
+		configList.length > 0 && await this.generatePreviewLinks(page, configList);
 		this.addCache(page);
 	}
 
@@ -127,16 +99,17 @@ class ObsidianStore {
 			return;
 		}
 
+		this.pageMap.set(page.path, page);
 		this.resolveCount++;
 	}
 
-	generateEspansoConfigFile(resolveLength: number) {
+	checkResolved(resolveLength: number) {
 		if (resolveLength !== this.resolveCount) {
-			window.requestAnimationFrame(() => this.generateEspansoConfigFile(resolveLength));
+			window.requestAnimationFrame(() => this.checkResolved(resolveLength));
 			return;
 		}
 
-		generateConfigFile();
+		console.log(`Obsidian ${APP_NAME} resolved`);
 	}
 
 	searchPreviewAnnotations(contents: string) {

@@ -8,15 +8,6 @@ class SettingStore {
 		this.settings = null as any;
 	}
 
-	get espansoConfigFilePath(): string {
-		if (!this.settings) {
-			log.error("Initialization did not complete");
-			return "";
-		}
-
-		return this.settings.espansoConfigPath;
-	}
-
 	reset(settings: Settings) {
 		this.settings = settings;
 	}

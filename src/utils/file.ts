@@ -25,14 +25,23 @@ export const selectFileSync = async (path: string, start: number | string | RegE
 		let ret = lines;
 		let startIndex = isNumber(start) ? start - 1 : 0;
 		let endIndex = isNumber(end) ? end - 1 : lines.length - 2;
-		if (isString(start) || isRegExp(start)) {
-			const reg = start instanceof RegExp ? start : new RegExp(start);
+		if (isString(start)) {
+			startIndex = lines.findIndex((line) => line.match(start));
+		}
+		if (isRegExp(start)) {
+			const reg = new RegExp(start.replace(/^\/(.*)\/$/, "$1"));
 			startIndex = lines.findIndex((line) => reg.test(line));
 		}
-		if (isString(end) || isRegExp(end)) {
-			const reg = end instanceof RegExp ? end : new RegExp(end);
-			endIndex = lines.findIndex((line, i) => i > startIndex && reg.test(line));
+
+		// endIndex
+		if (isString(end)) {
+			endIndex = lines.findIndex((line) => line.match(end));
 		}
+		if (isRegExp(end)) {
+			const reg = new RegExp(end.replace(/^\/(.*)\/$/, "$1"));
+			endIndex = lines.findIndex((line) => reg.test(line));
+		}
+
 		return ret.slice(startIndex, endIndex + 1).join("\n");
 	} catch (error) {
 		return error as string;
