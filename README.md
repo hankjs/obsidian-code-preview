@@ -38,7 +38,7 @@ path: /sub/color.css
 path: /hello.js
 ```</code></pre>
 
-### Select Line 
+### Select Line
 
 Customize the preview of the row
 
@@ -66,7 +66,12 @@ end: 3
 
 #### Use RegExp (search text)
 
-`dd\\d{2}` -> `/dd\d{2}/`
+`/dd\d{2}/`
+<pre><code>```preview
+path: /sub/color.css
+start: body
+end: dd\\d{2}
+```</code></pre>
 
 If you don't know RegExp, just use text directly. like:
 
@@ -75,16 +80,10 @@ If you don't know RegExp, just use text directly. like:
 <pre><code>```preview
 path: /sub/color.css
 start: body
-end: dd\\d{2}
+end: dd00dd
 ```</code></pre>
-
-
-## use espanso
-
-`example/espanso`
 
 ## TODO
 
 - [ ] Edit preivew file in Obsidian
 - [x] Configurable preview rows
-

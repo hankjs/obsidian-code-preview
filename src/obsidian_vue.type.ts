@@ -1,7 +1,8 @@
 import { CachedMetadata, FileStats, Plugin } from "obsidian";
 
 export interface Settings {
-	alias: Record<string, string>
+	highLightColor: string;
+	alias: Record<string, string>;
 }
 
 export interface YamlConfig {
@@ -9,9 +10,9 @@ export interface YamlConfig {
 	link?: string;
 	/** preview file path */
 	path?: string;
-	start?: number | string
-	end?: number | string
-	trigger?: string
+	start?: number | string;
+	end?: number | string;
+	trigger?: string;
 }
 
 export interface Page {

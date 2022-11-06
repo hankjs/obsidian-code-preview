@@ -28,7 +28,6 @@ export const resolve = (path: string, sourcePath?: string): string => {
 	}
 	path = path.replace("${vaultBasePath}", vaultBasePath);
 	if (isAlias) {
-		console.log("_path.normalize(path)", _path.normalize(path));
 		return _path.normalize(path);
 	}
 	if (sourcePath != null) {
