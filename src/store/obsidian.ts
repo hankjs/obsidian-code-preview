@@ -46,12 +46,6 @@ class ObsidianStore {
 		);
 
 		plugin.registerEvent(
-			this.app.metadataCache.on("resolved", () =>
-				this.checkResolved(Object.keys(this.app.metadataCache.resolvedLinks).length)
-			)
-		);
-
-		plugin.registerEvent(
 			this.app.vault.on("delete", (file: TAbstractFile) =>
 				this.onVaultDelete(file)
 			)
@@ -62,7 +56,7 @@ class ObsidianStore {
 				this.onVaultRename(file, oldPath)
 			)
 		);
-		console.log(`Obsidian ${APP_NAME} init`);
+		console.log(`Obsidian ${APP_NAME}`);
 	}
 
 	onVaultDelete(file: TAbstractFile) {
@@ -101,15 +95,6 @@ class ObsidianStore {
 
 		this.pageMap.set(page.path, page);
 		this.resolveCount++;
-	}
-
-	checkResolved(resolveLength: number) {
-		if (resolveLength !== this.resolveCount) {
-			window.requestAnimationFrame(() => this.checkResolved(resolveLength));
-			return;
-		}
-
-		console.log(`Obsidian ${APP_NAME} resolved`);
 	}
 
 	searchPreviewAnnotations(contents: string) {

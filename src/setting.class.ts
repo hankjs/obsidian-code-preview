@@ -22,6 +22,7 @@ export class SettingPlugin extends Plugin implements ISetting {
     this.store = useObsidianStore(this);
 
     await this.loadSettings();
+	this.settingsStore.init()
 
     this.settingsTab = new SettingsTab(this, {
       onSettingsChange: async (newSettings) => {

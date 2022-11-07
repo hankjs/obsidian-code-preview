@@ -6,10 +6,13 @@ import {
 } from "obsidian";
 import { wrapCodeBlock } from "./utils/string";
 import { extname, resolve } from "./utils/path";
-import { readFileSync, selectFileSync } from "./utils/file";
+import { selectFileSync } from "./utils/file";
 import { SettingPlugin } from "./setting.class";
+import { Suggest } from './suggest.class';
 
-export default class extends SettingPlugin {
+export default class CodePreviewPlugin extends SettingPlugin {
+	suggest!: Suggest;
+
 	async onload() {
 		super.onload();
 
@@ -19,6 +22,9 @@ export default class extends SettingPlugin {
 			async (source: string, el, ctx) =>
 				this.preview(source, el, ctx, ctx.sourcePath)
 		);
+
+		this.suggest = new Suggest(this.app);
+		this.registerEditorSuggest(this.suggest);
 	}
 
 	onunload() {
@@ -61,6 +67,10 @@ export default class extends SettingPlugin {
 			result.language =
 				codeSetting?.language || codeSetting?.lang || extname(path);
 			result.code = await selectFileSync(filePath, codeSetting.start, codeSetting.end);
+			if (!result.code) {
+				result.code = `File: ${filePath} not created or empty.`
+				return result
+			}
 			result.highlight = String(codeSetting.highlight);
 			result.lines = result.code.split("\n");
 		} catch (error) {

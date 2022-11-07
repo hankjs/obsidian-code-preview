@@ -1,8 +1,20 @@
 import { CachedMetadata, FileStats, Plugin } from "obsidian";
 
+export type Alias = string | {
+	alias: string;
+	include?: string[];
+	exclude?: string[];
+	includeFile?: string[];
+	excludeFile?: string[];
+}
+
 export interface Settings {
 	highLightColor: string;
-	alias: Record<string, string>;
+	alias: Record<string, Alias>;
+	include: string[];
+	exclude: string[];
+	includeFile: string[];
+	excludeFile: string[];
 }
 
 export interface YamlConfig {

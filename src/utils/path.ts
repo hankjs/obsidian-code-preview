@@ -14,16 +14,16 @@ export const resolve = (path: string, sourcePath?: string): string => {
 		return _path.resolve(vaultBasePath, path.slice(1));
 	}
 
-	const { settings } = useSettingStore();
-	const { alias } = settings;
+	const settingStore = useSettingStore();
+	const { alias } = settingStore.settings;
 	const aliasKeys = Object.keys(alias);
 	let isAlias = false;
 	for (let i = 0; i < aliasKeys.length; i++) {
 		const key = aliasKeys[i];
 		if (path.startsWith(key)) {
 			isAlias = true;
-			path = path.replace(key, alias[key]);
-			break;
+			path = path.replace(key, settingStore.getAlias(alias[key]).alias);
+			return resolve(path, sourcePath)
 		}
 	}
 	path = path.replace("${vaultBasePath}", vaultBasePath);
@@ -36,6 +36,13 @@ export const resolve = (path: string, sourcePath?: string): string => {
 
 	return _path.resolve(vaultBasePath, path);
 };
+
+export function relative(path: string, sourcePath?: string) {
+	const store = useObsidianStore();
+	const { vaultBasePath } = store;
+
+	return _path.relative(vaultBasePath, resolve(path, sourcePath));
+}
 
 export const extname = (path: string) => _path.extname(path).slice(1);
 
