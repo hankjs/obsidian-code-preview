@@ -15,7 +15,7 @@ import { Suggest } from './suggest.class';
 export default class CodePreviewPlugin extends SettingPlugin {
 	suggest!: Suggest;
 
-	watchFileMap = new WeakMap<WorkspaceLeaf, Record<string, Function[]>>();
+	watchFileMap = new WeakMap<WorkspaceLeaf, Record<string, Map<HTMLElement, Function[]>>>();
 
 	async onload() {
 		super.onload();
@@ -185,9 +185,10 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		sourcePath: string
 	) {
 		const { containerEl } = component as any;
-		this.removeWatchByEl(containerEl, sourcePath);
+		this.removeWatchByEl(containerEl, el, sourcePath);
 
 		const render = async () => {
+			console.log("render", source);
 			el.empty();
 			const { code, language, lines, highlight, filePath } = await this.code(source, sourcePath);
 			await MarkdownRenderer.renderMarkdown(
@@ -214,10 +215,10 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		}; // end render
 
 		const filename = await render();
-		this.addWatch(containerEl, sourcePath, filename, render);
+		this.addWatch(containerEl, el, sourcePath, filename, render);
 	}
 
-	addWatch(containerEl: HTMLElement, sourcePath: string, filename: string, handler: () => any) {
+	addWatch(containerEl: HTMLElement, el: HTMLElement, sourcePath: string, filename: string, handler: () => any) {
 		const leaves = this.app.workspace.getLeavesOfType("markdown");
 		const renderLeaf = leaves.find(leaf => leaf.view.containerEl.querySelector(".view-content") === containerEl);
 		if (!renderLeaf) {
@@ -231,9 +232,13 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		if (!map) {
 			this.watchFileMap.set(renderLeaf, map = {});
 		}
-		let unwatch = map[sourcePath];
+		let elMap = map[sourcePath];
+		if (!elMap) {
+			map[sourcePath] = (elMap = new Map());
+		}
+		let unwatch = elMap.get(el);
 		if (!unwatch) {
-			map[sourcePath] = (unwatch = []);
+			elMap.set(el, (unwatch = []));
 		}
 		unwatch.push(() => unwatchFile(filename, listener));
 
@@ -242,34 +247,61 @@ export default class CodePreviewPlugin extends SettingPlugin {
 				const leaves = this.app.workspace.getLeavesOfType("markdown");
 				const hasLeaf = leaves.some(l => l === renderLeaf);
 				if (!hasLeaf || (renderLeaf.view as FileView).file.path !== sourcePath) {
-					return this.removeWatch(renderLeaf, sourcePath);
+					return this.removeWatch(renderLeaf, el, sourcePath);
 				}
 			})
 
 		);
 	}
 
-	removeWatchByEl(containerEl: HTMLElement, sourcePath: string) {
+	removeWatchByEl(containerEl: HTMLElement, el: HTMLElement, sourcePath: string) {
 		const leaves = this.app.workspace.getLeavesOfType("markdown");
 		const renderLeaf = leaves.find(leaf => leaf.view.containerEl.querySelector(".view-content") === containerEl);
 		if (!renderLeaf) {
 			return;
 		}
-		this.removeWatch(renderLeaf, sourcePath);
+		this.removeWatch(renderLeaf, el, sourcePath);
 	}
 
-	removeWatch(leaf: WorkspaceLeaf, sourcePath: string) {
+	removeWatch(leaf: WorkspaceLeaf, el: HTMLElement, sourcePath: string) {
 		let map = this.watchFileMap.get(leaf);
 		if (!map) {
 			return;
 		}
-		let unwatch = map[sourcePath];
-		if (!unwatch) {
+		let elMap = map[sourcePath];
+		if (!elMap) {
 			return;
 		}
 
-		delete map[sourcePath];
+		const blocks = Array.from(leaf.view.containerEl.querySelectorAll(".block-language-preview"));
+		const watchEls: HTMLElement[] = [];
+		for (const k of elMap.keys()) {
+			watchEls.push(k);
+		}
 
-		unwatch.forEach(fn => fn());
+		const clear = (el: HTMLElement) => {
+			let unwatch = elMap.get(el);
+			if (!unwatch) {
+				elMap.set(el, (unwatch = []));
+			}
+
+			elMap.delete(el);
+			unwatch.forEach(fn => fn());
+		};
+
+		blocks.forEach(block => {
+			if (block !== el) {
+				return;
+			}
+
+			clear(el);
+		});
+
+		watchEls.forEach((el) => {
+			if (blocks.includes(el)) {
+				return;
+			}
+			clear(el);
+		});
 	}
 }
