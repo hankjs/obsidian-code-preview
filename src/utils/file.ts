@@ -109,3 +109,11 @@ export async function list(options: {
 
 	return filesPath;
 }
+
+export function watchFile(filename: string, listener: () => void) {
+	return fs.watchFile(filename, listener);
+}
+
+export function unwatchFile(filename: string, listener: () => void) {
+	return fs.unwatchFile(filename, listener);
+}

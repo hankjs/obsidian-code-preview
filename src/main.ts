@@ -1,17 +1,21 @@
 import {
 	Component,
+	FileView,
 	MarkdownPostProcessorContext,
 	MarkdownRenderer,
 	parseYaml,
+	WorkspaceLeaf,
 } from "obsidian";
 import { wrapCodeBlock } from "./utils/string";
 import { extname, resolve } from "./utils/path";
-import { selectFileSync } from "./utils/file";
+import { selectFileSync, unwatchFile, watchFile } from './utils/file';
 import { SettingPlugin } from "./setting.class";
 import { Suggest } from './suggest.class';
 
 export default class CodePreviewPlugin extends SettingPlugin {
 	suggest!: Suggest;
+
+	watchFileMap = new WeakMap<WorkspaceLeaf, Record<string, Function[]>>();
 
 	async onload() {
 		super.onload();
@@ -180,8 +184,11 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
+		const { containerEl } = component as any;
+		this.removeWatchByEl(containerEl, sourcePath);
 
 		const render = async () => {
+			el.empty();
 			const { code, language, lines, highlight, filePath } = await this.code(source, sourcePath);
 			await MarkdownRenderer.renderMarkdown(
 				wrapCodeBlock(language, code),
@@ -203,10 +210,66 @@ export default class CodePreviewPlugin extends SettingPlugin {
 				);
 			}
 
-			return filePath
+			return filePath;
 		}; // end render
 
-		const filePath = await render();
-		// TODO: watch file change
+		const filename = await render();
+		this.addWatch(containerEl, sourcePath, filename, render);
+	}
+
+	addWatch(containerEl: HTMLElement, sourcePath: string, filename: string, handler: () => any) {
+		const leaves = this.app.workspace.getLeavesOfType("markdown");
+		const renderLeaf = leaves.find(leaf => leaf.view.containerEl.querySelector(".view-content") === containerEl);
+		if (!renderLeaf) {
+			return;
+		}
+		const listener = () => handler();
+
+		watchFile(filename, listener);
+
+		let map = this.watchFileMap.get(renderLeaf);
+		if (!map) {
+			this.watchFileMap.set(renderLeaf, map = {});
+		}
+		let unwatch = map[sourcePath];
+		if (!unwatch) {
+			map[sourcePath] = (unwatch = []);
+		}
+		unwatch.push(() => unwatchFile(filename, listener));
+
+		this.registerEvent(
+			this.app.workspace.on("layout-change", () => {
+				const leaves = this.app.workspace.getLeavesOfType("markdown");
+				const hasLeaf = leaves.some(l => l === renderLeaf);
+				if (!hasLeaf || (renderLeaf.view as FileView).file.path !== sourcePath) {
+					return this.removeWatch(renderLeaf, sourcePath);
+				}
+			})
+
+		);
+	}
+
+	removeWatchByEl(containerEl: HTMLElement, sourcePath: string) {
+		const leaves = this.app.workspace.getLeavesOfType("markdown");
+		const renderLeaf = leaves.find(leaf => leaf.view.containerEl.querySelector(".view-content") === containerEl);
+		if (!renderLeaf) {
+			return;
+		}
+		this.removeWatch(renderLeaf, sourcePath);
+	}
+
+	removeWatch(leaf: WorkspaceLeaf, sourcePath: string) {
+		let map = this.watchFileMap.get(leaf);
+		if (!map) {
+			return;
+		}
+		let unwatch = map[sourcePath];
+		if (!unwatch) {
+			return;
+		}
+
+		delete map[sourcePath];
+
+		unwatch.forEach(fn => fn());
 	}
 }
