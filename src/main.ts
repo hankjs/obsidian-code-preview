@@ -57,6 +57,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			language: "",
 			highlight: "",
 			lines: [] as string[],
+			filePath: "",
 		};
 
 		try {
@@ -68,9 +69,10 @@ export default class CodePreviewPlugin extends SettingPlugin {
 				codeSetting?.language || codeSetting?.lang || extname(path);
 			result.code = await selectFileSync(filePath, codeSetting.start, codeSetting.end);
 			if (!result.code) {
-				result.code = `File: ${filePath} not created or empty.`
-				return result
+				result.code = `File: ${filePath} not created or empty.`;
+				return result;
 			}
+			result.filePath = filePath;
 			result.highlight = String(codeSetting.highlight);
 			result.lines = result.code.split("\n");
 		} catch (error) {
@@ -136,11 +138,12 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		pre.appendChild(highLightWrap);
 	}
 
-	analyzeHighLightLines(lines: string[], source: string) {
-		source = source.replace(/\s*/g, ""); // 去除字符串中所有空格
+	analyzeHighLightLines(lines: string[], source: string | string[]) {
 		const result = new Map<number, boolean>();
 
-		let strs = source.split(",");
+		let strs = typeof source !== "string" ? source : source
+			.replace(/\s*/g, "") // 去除字符串中所有空格
+			.split(",");
 		strs.forEach(it => {
 			if (/\w+-\w+/.test(it)) { // 如果匹配 1-3 这样的格式，依次添加数字
 				let left = Number(it.split('-')[0]);
@@ -177,25 +180,33 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
-		const { code, language, lines, highlight } = await this.code(source, sourcePath);
-		await MarkdownRenderer.renderMarkdown(
-			wrapCodeBlock(language, code),
-			el,
-			sourcePath,
-			component as Component
-		);
-		const pre = el.querySelector("pre");
-		if (!pre) {
-			return;
-		}
-		this.addLineNumber(pre, el, lines.length);
 
-		if (highlight) {
-			this.addLineHighLight(
-				pre,
-				this.analyzeHighLightLines(lines, highlight),
-				lines.length
+		const render = async () => {
+			const { code, language, lines, highlight, filePath } = await this.code(source, sourcePath);
+			await MarkdownRenderer.renderMarkdown(
+				wrapCodeBlock(language, code),
+				el,
+				sourcePath,
+				component as Component
 			);
-		}
+			const pre = el.querySelector("pre");
+			if (!pre) {
+				return filePath;
+			}
+			this.addLineNumber(pre, el, lines.length);
+
+			if (highlight) {
+				this.addLineHighLight(
+					pre,
+					this.analyzeHighLightLines(lines, highlight),
+					lines.length
+				);
+			}
+
+			return filePath
+		}; // end render
+
+		const filePath = await render();
+		// TODO: watch file change
 	}
 }

@@ -12,7 +12,7 @@ export const DEFAULT_SETTINGS: Settings = {
 	alias: {
 		"code": {
 			alias: "/../code",
-			includeFile: ["/\\.json$/"],
+			includeFile: ["/\\.js$/"],
 		}
 	}
 };

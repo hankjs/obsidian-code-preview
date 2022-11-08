@@ -24,16 +24,16 @@ export class Suggest extends EditorSuggest<PathSearch> {
 	onTrigger(cursor: EditorPosition, editor: Editor, file: TFile): EditorSuggestTriggerInfo | null {
 		const lineText = editor.getLine(cursor.line);
 
-		const pathMatches = lineText.match(/^\s*path:\s*(.*)/);
+		const pathMatches = lineText.match(/^(>|\s)*path:\s*(.*)/);
 		if (pathMatches) {
-			this.onPathTrigger(cursor, pathMatches);
+			return this.onPathTrigger(cursor, pathMatches);
 		}
 
 		return null;
 	}
 
 	onPathTrigger(cursor: EditorPosition, matches: RegExpMatchArray) {
-		const [origin, query] = matches;
+		const [origin, prefix, query] = matches;
 
 		return {
 			start: {
