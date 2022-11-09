@@ -211,9 +211,9 @@ highlight:
 | Config | Description | Type |Default|
 |---|---|---|---|
 | highLightColor | highlight background | css color | #2d82cc20 |
-| include | include path, Empty is All | Array<string or RegExp> |  [] |
-| exclude | exclude path | Array<string or RegExp> |  ["node_modules", ".obsidian"] |
-| includeFile | include file, Required | Array<string or RegExp> |  ["/\\.js$/", "/\\.css$/"] |
-| excludeFile | exclude file | Array<string or RegExp> |  [] |
+| include | include path, Empty is All | `Array<string or RegExp>` |  [] |
+| exclude | exclude path | `Array<string or RegExp>` |  ["node_modules", ".obsidian"] |
+| includeFile | include file, Required | `Array<string or RegExp>` |  ["/\\.js$/", "/\\.css$/"] |
+| excludeFile | exclude file | `Array<string or RegExp>` |  [] |
 | alias | alias path | string \| Alias |  code |
 | linenumber | display linenumber | true or false | true |

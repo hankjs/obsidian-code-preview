@@ -14,11 +14,18 @@ import { Suggest } from './suggest.class';
 
 export default class CodePreviewPlugin extends SettingPlugin {
 	suggest!: Suggest;
+	style = {
+		top: "8px",
+		lineHeight: "21px",
+		fontSize: "14px"
+	};
 
 	watchFileMap = new WeakMap<WorkspaceLeaf, Record<string, Map<HTMLElement, Function[]>>>();
 
 	async onload() {
 		super.onload();
+		this.app.workspace.onLayoutReady(() => this.initCss());
+		this.registerEvent(this.app.workspace.on("resize", () => this.initCss()));
 
 		this.registerPriorityCodeblockPostProcessor(
 			"preview",
@@ -33,6 +40,32 @@ export default class CodePreviewPlugin extends SettingPlugin {
 
 	onunload() {
 		super.onunload();
+	}
+
+	initCss() {
+		const out = createDiv({
+			cls: "markdown-rendered",
+			attr: {
+				style: "position: absolute; top: 0; left: -999999px;"
+			}
+		});
+		const pre = createEl("pre", {
+			"cls": "language-code-preview-plugin-tmp",
+		});
+		const code = createEl("code", {
+			"cls": "language-css is-loaded"
+		});
+		out.appendChild(pre);
+		pre.appendChild(code);
+		document.body.appendChild(out);
+
+		const preStyles = getComputedStyle(pre);
+		const codeStyles = getComputedStyle(code);
+		this.style = {
+			top: preStyles.paddingTop,
+			lineHeight: codeStyles.lineHeight,
+			fontSize: codeStyles.fontSize
+		};
 	}
 
 	/** Register a markdown codeblock post processor with the given priority. */
@@ -103,12 +136,11 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			return;
 		}
 
-		const preStyles = getComputedStyle(pre);
-		const codeStyles = getComputedStyle(codeEl);
+		const { top, lineHeight, fontSize } = this.style;
 		const line_number = createEl('span', {
 			cls: 'code-block-line_num-wrap',
 			attr: {
-				style: `top: ${preStyles.paddingTop}; line-height: ${codeStyles.lineHeight}; font-size: ${codeStyles.fontSize};`
+				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize};`
 			}
 		});
 
@@ -126,11 +158,11 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		if (!codeEl) {
 			return;
 		}
-		const preStyles = getComputedStyle(pre);
-		const codeStyles = getComputedStyle(codeEl);
+
+		const { top, lineHeight, fontSize } = this.style;
 		let highLightWrap = createEl("div", {
 			attr: {
-				style: `top: ${preStyles.paddingTop}; line-height: ${codeStyles.lineHeight}; font-size: ${codeStyles.fontSize};`
+				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize};`
 			}
 		});
 		highLightWrap.className = "code-block-highlight-wrap";
@@ -264,7 +296,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		this.removeWatch(renderLeaf, el, sourcePath);
 	}
 
-	removeWatch(leaf: WorkspaceLeaf, el: HTMLElement, sourcePath: string) {
+	removeWatch(leaf: WorkspaceLeaf, el: HTMLElement, sourcePath: string, clearOther = true) {
 		let map = this.watchFileMap.get(leaf);
 		if (!map) {
 			return;
@@ -275,10 +307,6 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		}
 
 		const blocks = Array.from(leaf.view.containerEl.querySelectorAll(".block-language-preview"));
-		const watchEls: HTMLElement[] = [];
-		for (const k of elMap.keys()) {
-			watchEls.push(k);
-		}
 
 		const clear = (el: HTMLElement) => {
 			let unwatch = elMap.get(el);
@@ -298,11 +326,18 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			clear(el);
 		});
 
-		watchEls.forEach((el) => {
-			if (blocks.includes(el)) {
-				return;
+		if (clearOther) {
+			const watchEls: HTMLElement[] = [];
+			for (const k of elMap.keys()) {
+				watchEls.push(k);
 			}
-			clear(el);
-		});
+			watchEls.forEach((el) => {
+				if (blocks.includes(el)) {
+					return;
+				}
+				clear(el);
+			});
+		}
+
 	}
 }
