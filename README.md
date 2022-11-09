@@ -217,3 +217,7 @@ highlight:
 | excludeFile | exclude file | `Array<string or RegExp>` |  [] |
 | alias | alias path | string \| Alias |  code |
 | linenumber | display linenumber | true or false | true |
+
+## Thank
+
+linenumber, highlight Based on [obsidian-better-codeblock](https://github.com/stargrey/obsidian-better-codeblock) his implementation

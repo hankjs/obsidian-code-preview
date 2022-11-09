@@ -215,3 +215,7 @@ highlight:
 | excludeFile | 排除的文件 | `Array<string or RegExp>` |  [] |
 | alias | 路径映射 | string \| Alias |  code |
 | linenumber | 是否显示行号 | true or false | true |
+
+## Thank
+
+linenumber, highlight 基于[obsidian-better-codeblock](https://github.com/stargrey/obsidian-better-codeblock)基础实现
