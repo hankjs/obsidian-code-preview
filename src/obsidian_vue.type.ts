@@ -15,6 +15,7 @@ export interface Settings {
 	exclude: string[];
 	includeFile: string[];
 	excludeFile: string[];
+	linenumber: boolean
 }
 
 export interface YamlConfig {

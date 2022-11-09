@@ -62,7 +62,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			highlight: "",
 			lines: [] as string[],
 			filePath: "",
-			linenumber: true
+			linenumber: this.settings.linenumber
 		};
 
 		try {
@@ -203,7 +203,6 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			if (!pre) {
 				return filePath;
 			}
-			console.log("linenumber", linenumber);
 			linenumber && this.addLineNumber(pre, el, lines.length);
 
 			highlight &&

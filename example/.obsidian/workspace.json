@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Basic.md",
+                "file": "Example.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Basic.md",
+                "file": "Example.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Basic.md",
+                "file": "Example.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Basic.md"
+                "file": "Example.md"
               }
             }
           }
@@ -139,8 +139,8 @@
   "active": "278454ee4ff548b1",
   "lastOpenFiles": [
     "Relative Path And Language.md",
-    "sub/Select Line.md",
+    "Example.md",
     "sub/Root Path.md",
-    "Basic.md"
+    "sub/Select Line.md"
   ]
 }

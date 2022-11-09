@@ -1,10 +1,15 @@
 ## Obsidian Code Previews Plugin
 
-## use preview
+[中文](./README.CN.md)
 
-`example/preview`
+## Example
 
-### Basic
+Specific examples can be use `Open folder as  vault` open [example.zip]().
+
+### Path
+
+<details open>
+<summary> Basic </summary>
 
 Code language is extname by path
 
@@ -12,21 +17,19 @@ Code language is extname by path
 path: hello.js
 ```</code></pre>
 
-### Relative Path And Language
+</details>
 
-Language key: `language`、`lang`
-
-<pre><code>```preview
-path: ./hello.js
-lang: ts
-```</code></pre>
+<details open>
+<summary> Relative Path </summary>
 
 <pre><code>```preview
 path: ./hello.js
-language: ts
 ```</code></pre>
 
-### Root Path
+</details>
+
+<details open>
+<summary> Absolute Path </summary>
 
 The root path is Vault folder
 
@@ -38,25 +41,57 @@ path: /sub/color.css
 path: /hello.js
 ```</code></pre>
 
-### Select Line
+</details>
 
-Customize the preview of the row
+### CodeBlock language
 
-#### The third line of the file ends
+Code language is extname by path
+
+Language key: `language`、`lang`
+
+<details open>
+<summary> language、lang </summary>
+
+<pre><code>```preview
+path: ./hello.js
+lang: ts
+```</code></pre>
+
+</details>
+
+<pre><code>```preview
+path: ./hello.js
+language: ts
+```</code></pre>
+
+</details>
+
+### Select display line range
+
+custom start or end
+
+<details open>
+<summary> The third line of the file ends </summary>
 
 <pre><code>```preview
 path: /sub/color.css
 start: 3
 ```</code></pre>
 
-#### The first line to the third line
+</details>
+
+<details open>
+<summary> The first line to the third line </summary>
 
 <pre><code>```preview
 path: /sub/color.css
 end: 3
 ```</code></pre>
 
-#### Only preview the third line
+</details>
+
+<details open>
+<summary> Only preview the third line </summary>
 
 <pre><code>```preview
 path: /sub/color.css
@@ -64,9 +99,24 @@ start: 3
 end: 3
 ```</code></pre>
 
-#### Use RegExp (search text)
+</details>
+
+<details open>
+<summary> Line Range </summary>
+
+<pre><code>```preview
+path: /sub/color.css
+start: 2
+end: 3
+```</code></pre>
+
+</details>
+
+<details open>
+<summary> Use RegExp or Search text) </summary>
 
 `/dd\d{2}/`
+
 <pre><code>```preview
 path: /sub/color.css
 start: body
@@ -75,7 +125,8 @@ end: dd\\d{2}
 
 If you don't know RegExp, just use text directly. like:
 
-`dd00dd`: match `dd00dd` inside the line
+`start: body`: match `body` inside the line
+`end: dd00dd`: match `dd00dd` inside the line
 
 <pre><code>```preview
 path: /sub/color.css
@@ -83,7 +134,86 @@ start: body
 end: dd00dd
 ```</code></pre>
 
-## TODO
+</details>
 
-- [ ] Edit preivew file in Obsidian
-- [x] Configurable preview rows
+### Highlight
+
+<details open>
+<summary> By line </summary>
+
+<pre><code>```preview
+path: /sub/color.css
+highlight: 1
+```</code></pre>
+
+</details>
+
+<details open>
+<summary> Range </summary>
+
+<pre><code>```preview
+path: /sub/color.css
+highlight: 1-3
+```</code></pre>
+
+<details open>
+<summary> Search text </summary>
+
+<pre><code>```preview
+path: /sub/color.css
+highlight: dd00dd
+```</code></pre>
+
+</details>
+
+<details open>
+<summary> RegExp </summary>
+
+<pre><code>```preview
+path: /sub/color.css
+highlight: /dd\d{2}/
+```</code></pre>
+
+<details open>
+<summary> Multi rule </summary>
+
+Separator `,`.
+
+<pre><code>```preview
+path: /sub/color.css
+highlight: /dd\d{2}/, 1, body
+```</code></pre>
+
+YAML list
+
+<pre><code>```preview
+path: /sub/color.css
+highlight:
+  - /dd\d{2}/
+  - 1
+  - body
+```</code></pre>
+
+</details>
+
+## CodeBlock YAML config
+
+| Config | Description | Type |Default|
+|---|---|---|---|
+| path | file path | string |  Required |
+| start | preview start line. Start with 1 | number or string or RegExp |  - |
+| end | preview end line. | number or string or RegExp |  - |
+| highlight | highlight lines | number or string or RegExp | - |
+| linenumber | display line Numbers, priority is greater than the plugin configuration | true or false | plugin config |
+
+## Plugin configuration
+
+| Config | Description | Type |Default|
+|---|---|---|---|
+| highLightColor | highlight background | css color | #2d82cc20 |
+| include | include path, Empty is All | Array<string or RegExp> |  [] |
+| exclude | exclude path | Array<string or RegExp> |  ["node_modules", ".obsidian"] |
+| includeFile | include file, Required | Array<string or RegExp> |  ["/\\.js$/", "/\\.css$/"] |
+| excludeFile | exclude file | Array<string or RegExp> |  [] |
+| alias | alias path | string \| Alias |  code |
+| linenumber | display linenumber | true or false | true |
