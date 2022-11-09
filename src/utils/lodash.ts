@@ -36,5 +36,5 @@ export function isNumber(o: any): o is number {
 }
 
 export function isRegExp(o: any): o is string {
-	return Object.prototype.toString.call(o) === "[object RegExp]" || /\/(.*)\//.test(o);
+	return Object.prototype.toString.call(o) === "[object RegExp]" || /^\/(.*)\/$/.test(o);
 }

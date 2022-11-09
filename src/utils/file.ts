@@ -16,7 +16,7 @@ export const selectFileSync = async (path: string, start: number | string | RegE
 	let startIndex = isNumber(start) ? start - 1 : 0;
 	let endIndex = isNumber(end) ? end - 1 : lines.length - 2;
 	if (isString(start)) {
-		startIndex = lines.findIndex((line) => line.match(start));
+		startIndex = lines.findIndex((line) => line.indexOf(start) > -1);
 	}
 	if (isRegExp(start)) {
 		const reg = new RegExp(start.replace(/^\/(.*)\/$/, "$1"));
@@ -25,7 +25,7 @@ export const selectFileSync = async (path: string, start: number | string | RegE
 
 	// endIndex
 	if (isString(end)) {
-		endIndex = lines.findIndex((line) => line.match(end));
+		endIndex = lines.findIndex((line) => line.indexOf(end) > -1);
 	}
 	if (isRegExp(end)) {
 		const reg = new RegExp(end.replace(/^\/(.*)\/$/, "$1"));
