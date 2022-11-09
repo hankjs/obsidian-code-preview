@@ -154,6 +154,8 @@ path: /sub/color.css
 highlight: 1-3
 ```</code></pre>
 
+</details>
+
 <details open>
 <summary> Search text </summary>
 
@@ -171,6 +173,8 @@ highlight: dd00dd
 path: /sub/color.css
 highlight: /dd\d{2}/
 ```</code></pre>
+
+</details>
 
 <details open>
 <summary> Multi rule </summary>
