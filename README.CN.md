@@ -55,8 +55,6 @@ path: ./hello.js
 lang: ts
 ```</code></pre>
 
-</details>
-
 <pre><code>```preview
 path: ./hello.js
 language: ts
