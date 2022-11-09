@@ -44,7 +44,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 
 	initCss() {
 		const out = createDiv({
-			cls: "markdown-rendered",
+			cls: "markdown-rendered markdown-source-view",
 			attr: {
 				style: "position: absolute; top: 0; left: -999999px;"
 			}
@@ -66,6 +66,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			lineHeight: codeStyles.lineHeight,
 			fontSize: codeStyles.fontSize
 		};
+		out.remove();
 	}
 
 	/** Register a markdown codeblock post processor with the given priority. */
