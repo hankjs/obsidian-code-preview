@@ -62,12 +62,15 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			highlight: "",
 			lines: [] as string[],
 			filePath: "",
+			linenumber: true
 		};
 
 		try {
 			const codeSetting = parseYaml(source);
 			const path = codeSetting?.path || codeSetting?.link;
 			const filePath = resolve(path, sourcePath);
+
+			result.linenumber = codeSetting.linenumber == null ? result.linenumber : codeSetting.linenumber;
 
 			result.language =
 				codeSetting?.language || codeSetting?.lang || extname(path);
@@ -149,7 +152,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			.replace(/\s*/g, "") // 去除字符串中所有空格
 			.split(",");
 		strs.forEach(it => {
-			if (/\w+-\w+/.test(it)) { // 如果匹配 1-3 这样的格式，依次添加数字
+			if (/\d+-\d+/.test(it)) { // 如果匹配 1-3 这样的格式，依次添加数字
 				let left = Number(it.split('-')[0]);
 				let right = Number(it.split('-')[1]);
 				for (let i = left; i <= right; i++) {
@@ -188,9 +191,8 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		this.removeWatchByEl(containerEl, el, sourcePath);
 
 		const render = async () => {
-			console.log("render", source);
 			el.empty();
-			const { code, language, lines, highlight, filePath } = await this.code(source, sourcePath);
+			const { code, language, lines, highlight, filePath, linenumber } = await this.code(source, sourcePath);
 			await MarkdownRenderer.renderMarkdown(
 				wrapCodeBlock(language, code),
 				el,
@@ -201,15 +203,15 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			if (!pre) {
 				return filePath;
 			}
-			this.addLineNumber(pre, el, lines.length);
+			console.log("linenumber", linenumber);
+			linenumber && this.addLineNumber(pre, el, lines.length);
 
-			if (highlight) {
+			highlight &&
 				this.addLineHighLight(
 					pre,
 					this.analyzeHighLightLines(lines, highlight),
 					lines.length
 				);
-			}
 
 			return filePath;
 		}; // end render

@@ -76,7 +76,7 @@ export class Suggest extends EditorSuggest<PathSearch> {
 	}
 
 	getAliasSuggestions(context: EditorSuggestContext) {
-		const { settings: { alias } } = useSettingStore();
+		const { settings: { alias }, includeFilePath } = useSettingStore();
 		const aliasKeys = Object.keys(alias);
 
 		let result: PathSearch[] = [];
@@ -86,6 +86,16 @@ export class Suggest extends EditorSuggest<PathSearch> {
 			match && result.push({
 				match,
 				item
+			});
+		}
+
+		if (includeFilePath.length > 0) {
+			includeFilePath.forEach(item => {
+				const match = fuzzySearch(item);
+				match && result.push({
+					match,
+					item
+				});
 			});
 		}
 
@@ -148,9 +158,11 @@ export class Suggest extends EditorSuggest<PathSearch> {
 
 		// click or enter
 		const { editor, start, end, aliasKey: prefix } = this.context;
+		const replacement = !prefix ? value.item : `${prefix}/${value.item}`
 		editor.replaceRange(
-			!prefix ? value.item : `${prefix}/${value.item}`,
+			replacement,
 			start, end);
+		editor.setCursor(end.line, end.ch + replacement.length);
 		this.close();
 	}
 
