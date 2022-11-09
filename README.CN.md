@@ -55,8 +55,6 @@ path: ./hello.js
 lang: ts
 ```</code></pre>
 
-</details>
-
 <pre><code>```preview
 path: ./hello.js
 language: ts
@@ -154,6 +152,8 @@ path: /sub/color.css
 highlight: 1-3
 ```</code></pre>
 
+</details>
+
 <details open>
 <summary> 按文本搜索高亮 </summary>
 
@@ -171,6 +171,8 @@ highlight: dd00dd
 path: /sub/color.css
 highlight: /dd\d{2}/
 ```</code></pre>
+
+</details>
 
 <details open>
 <summary> 多个条件 </summary>
