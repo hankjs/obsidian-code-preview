@@ -111,6 +111,19 @@ end: 3
 </details>
 
 <details open>
+<summary> end increase by start </summary>
+
+`end: "+1"`, config `"` is required.
+
+<pre><code>```preview
+path: /sub/color.css
+start: 2
+end: "+1"
+```</code></pre>
+
+</details>
+
+<details open>
 <summary> Use RegExp or Search text) </summary>
 
 `/dd\d{2}/`

@@ -109,6 +109,19 @@ end: 3
 </details>
 
 <details open>
+<summary> end 根据start增长 </summary>
+
+`end: "+1"`，这里面的`"`是必须的。
+
+<pre><code>```preview
+path: /sub/color.css
+start: 2
+end: "+1"
+```</code></pre>
+
+</details>
+
+<details open>
 <summary> 使用正则或者直接文本搜索 </summary>
 
 `/dd\d{2}/`

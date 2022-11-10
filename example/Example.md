@@ -81,6 +81,16 @@ start: 2
 end: 3
 ```
 
+## end increase by start
+
+`end: "+1"`, config `"` is required.
+
+```preview
+path: /sub/color.css
+start: 2
+end: "+1"
+```
+
 #### Use RegExp or Search text)
 
 `/dd\d{2}/`
