@@ -1,5 +1,6 @@
 import { Editor, EditorPosition, EditorSuggest, EditorSuggestContext, EditorSuggestTriggerInfo, prepareFuzzySearch, SearchResult, TFile } from "obsidian";
 import { useSettingStore } from "./store";
+import { Alias } from './obsidian_vue.type';
 
 interface PathSearch {
 	match: SearchResult;
@@ -132,6 +133,7 @@ export class Suggest extends EditorSuggest<PathSearch> {
 			.replace(/^\//, "");
 		const fuzzySearch = prepareFuzzySearch(query);
 		for (let item of paths) {
+			item = this.clearAliasPath(alias[aliasKey], item);
 			const match = fuzzySearch(item);
 			match && result.push({
 				match,
@@ -147,6 +149,20 @@ export class Suggest extends EditorSuggest<PathSearch> {
 		return result;
 	}
 
+	clearAliasPath(alias: Alias, path: string) {
+		if (typeof alias !== "string") {
+			alias = alias.alias;
+		}
+
+		const aliasPath = alias
+			.replace(/^\//, "")
+			.replace(/^\\/, "")
+			.replace(/^\.\.\//, "")
+			.replace(/^\.\.\\/, "");
+
+		return path.replace(`${aliasPath}/`, "");
+	}
+
 	renderSuggestion(value: PathSearch, el: HTMLElement): void {
 		el.setText(value.item);
 	}
@@ -157,12 +173,12 @@ export class Suggest extends EditorSuggest<PathSearch> {
 		}
 
 		// click or enter
-		const { editor, start, end, aliasKey: prefix } = this.context;
-		const replacement = !prefix ? value.item : `${prefix}/${value.item}`
+		const { editor, start, end, aliasKey: prefix, query } = this.context;
+		const replacement = !prefix ? value.item : `${prefix}/${value.item}`;
 		editor.replaceRange(
 			replacement,
 			start, end);
-		editor.setCursor(end.line, end.ch + replacement.length);
+		editor.setCursor(end.line, end.ch + replacement.length - query.length);
 		this.close();
 	}
 
