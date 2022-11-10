@@ -25,7 +25,14 @@ export const selectFileSync = async (path: string, start: number | string | RegE
 
 	// endIndex
 	if (isString(end)) {
-		endIndex = lines.findIndex((line) => line.indexOf(end) > -1);
+		if (end.startsWith("+")) {
+			// increase by start
+			endIndex = startIndex + Number(
+				end.replace("+", "")
+			);
+		} else {
+			endIndex = lines.findIndex((line) => line.indexOf(end) > -1);
+		}
 	}
 	if (isRegExp(end)) {
 		const reg = new RegExp(end.replace(/^\/(.*)\/$/, "$1"));
