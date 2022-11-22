@@ -20,7 +20,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		fontSize: "14px"
 	};
 
-	watchFileMap = new WeakMap<WorkspaceLeaf, Record<string, Map<HTMLElement, Function[]>>>();
+	watchFileMap = new WeakMap<WorkspaceLeaf, Record<string, Map<HTMLElement, (() => void)[]>>>();
 
 	async onload() {
 		super.onload();
@@ -79,7 +79,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			ctx: MarkdownPostProcessorContext
 		) => Promise<void>
 	) {
-		let registered = this.registerMarkdownCodeBlockProcessor(
+		const registered = this.registerMarkdownCodeBlockProcessor(
 			language,
 			processor
 		);
@@ -161,7 +161,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		}
 
 		const { top, lineHeight, fontSize } = this.style;
-		let highLightWrap = createEl("div", {
+		const highLightWrap = createEl("div", {
 			attr: {
 				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize};`
 			}
@@ -181,13 +181,13 @@ export default class CodePreviewPlugin extends SettingPlugin {
 	analyzeHighLightLines(lines: string[], source: string | string[]) {
 		const result = new Map<number, boolean>();
 
-		let strs = typeof source !== "string" ? source : source
+		const strs = typeof source !== "string" ? source : source
 			.replace(/\s*/g, "") // 去除字符串中所有空格
 			.split(",");
 		strs.forEach(it => {
 			if (/\d+-\d+/.test(it)) { // 如果匹配 1-3 这样的格式，依次添加数字
-				let left = Number(it.split('-')[0]);
-				let right = Number(it.split('-')[1]);
+				const left = Number(it.split('-')[0]);
+				const right = Number(it.split('-')[1]);
 				for (let i = left; i <= right; i++) {
 					result.set(i, true);
 				}
@@ -220,7 +220,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		component: Component | MarkdownPostProcessorContext,
 		sourcePath: string
 	) {
-		const { containerEl } = component as any;
+		const { containerEl } = component as unknown as { containerEl: HTMLElement; };
 		this.removeWatchByEl(containerEl, el, sourcePath);
 
 		const render = async () => {
@@ -249,16 +249,22 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		}; // end render
 
 		const filename = await render();
-		this.addWatch(containerEl, el, sourcePath, filename, render);
+		this.settings.watchCode && this.addWatch(containerEl, el, sourcePath, filename, render);
 	}
 
-	addWatch(containerEl: HTMLElement, el: HTMLElement, sourcePath: string, filename: string, handler: () => any) {
+	addWatch(containerEl: HTMLElement, el: HTMLElement, sourcePath: string, filename: string, handler: () => void) {
 		const leaves = this.app.workspace.getLeavesOfType("markdown");
 		const renderLeaf = leaves.find(leaf => leaf.view.containerEl.querySelector(".view-content") === containerEl);
 		if (!renderLeaf) {
 			return;
 		}
-		const listener = () => handler();
+		const listener = () => {
+			if (!this.settings.watchCode) {
+				this.removeWatch(renderLeaf, el, sourcePath);
+				return;
+			}
+			handler();
+		};
 
 		watchFile(filename, listener);
 
@@ -280,7 +286,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			this.app.workspace.on("layout-change", () => {
 				const leaves = this.app.workspace.getLeavesOfType("markdown");
 				const hasLeaf = leaves.some(l => l === renderLeaf);
-				if (!hasLeaf || (renderLeaf.view as FileView).file.path !== sourcePath) {
+				if (!this.settings.watchCode || !hasLeaf || (renderLeaf.view as FileView).file.path !== sourcePath) {
 					return this.removeWatch(renderLeaf, el, sourcePath);
 				}
 			})
@@ -298,11 +304,11 @@ export default class CodePreviewPlugin extends SettingPlugin {
 	}
 
 	removeWatch(leaf: WorkspaceLeaf, el: HTMLElement, sourcePath: string, clearOther = true) {
-		let map = this.watchFileMap.get(leaf);
+		const map = this.watchFileMap.get(leaf);
 		if (!map) {
 			return;
 		}
-		let elMap = map[sourcePath];
+		const elMap = map[sourcePath];
 		if (!elMap) {
 			return;
 		}

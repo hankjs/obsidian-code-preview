@@ -3,6 +3,7 @@ import { DataWriteOptions } from "obsidian";
 import { useObsidianStore } from "src/store";
 import { isNumber, isRegExp, isString } from "./lodash";
 import { relative } from './path';
+import { Alias } from '../obsidian_vue.type';
 
 export function readFile(path: string) {
 	const { app } = useObsidianStore();
@@ -12,7 +13,7 @@ export function readFile(path: string) {
 export const selectFileSync = async (path: string, start: number | string | RegExp = 1, end?: number | string | RegExp) => {
 	const content = await readFile(path);
 	const lines = content.split("\n");
-	let ret = lines;
+	const ret = lines;
 	let startIndex = isNumber(start) ? start - 1 : 0;
 	let endIndex = isNumber(end) ? end - 1 : lines.length - 2;
 	if (isString(start)) {
@@ -69,18 +70,23 @@ export async function list(options: {
 	paths: string[];
 	replacer?: (path: string) => string;
 	recurs?: boolean;
-	filesPath?: string[];
-	include?: string[];
-	exclude?: string[];
-	includeFile?: string[];
-	excludeFile?: string[];
+	filesPath?: string[],
+	alias: Alias;
 }) {
 	let {
-		paths, recurs = true, filesPath = [],
-		include = [], exclude = [],
-		includeFile = [], excludeFile = [],
+		paths,
+	} = options;
+	const {
+		recurs = true,
+		alias,
+		filesPath = [],
 		replacer
 	} = options;
+
+	if (typeof alias === "string") {
+		return filesPath;
+	}
+
 	if (paths.length === 0) {
 		return filesPath;
 	}
@@ -94,21 +100,17 @@ export async function list(options: {
 	for (let i = 0; i < paths.length; i++) {
 		const path = paths[i];
 		const { files, folders } = await adapter.list(path);
-		const includeFolders = include.length === 0 ? folders : folders.filter(source => include.some(pattern => match(pattern, source)));
-		const excludeFolders = exclude.length === 0 ? includeFolders : includeFolders.filter(source => !exclude.some(pattern => match(pattern, source)));
+		const { folders: filterFolders, files: filterFiles } = filterPathByAlias(alias, folders, files);
 
-		const includeFiles = includeFile.length === 0 ? files : files.filter(source => includeFile.some(pattern => match(pattern, source)));
-		const excludeFiles = excludeFile.length === 0 ? includeFiles : includeFiles.filter(source => !excludeFile.some(pattern => match(pattern, source)));
-
-		excludeFiles.forEach(
+		filterFiles.forEach(
 			(p) => filesPath.push(
 				replacer ? replacer(clearRelative(p)) : clearRelative(p)
 			)
 		);
-		if (excludeFolders.length > 0 && recurs) {
+		if (filterFolders.length > 0 && recurs) {
 			await list({
 				...options,
-				paths: excludeFolders,
+				paths: filterFolders,
 				filesPath
 			});
 		}
@@ -117,10 +119,44 @@ export async function list(options: {
 	return filesPath;
 }
 
+export function filterPathByAlias(aliasObj: Alias, folders: string[], files: string[]) {
+	if (typeof aliasObj === "string") {
+		return {
+			folders: [],
+			files: []
+		};
+	}
+
+	const {
+		include = [], exclude = [],
+		includeFile = [], excludeFile = [],
+	} = aliasObj;
+
+	const includeFolders = include.length === 0 ? folders : folders.filter(source => include.some(pattern => match(pattern, source)));
+	const excludeFolders = exclude.length === 0 ? includeFolders : includeFolders.filter(source => !exclude.some(pattern => match(pattern, source)));
+
+	const includeFiles = includeFile.length === 0 ? files : files.filter(source => includeFile.some(pattern => match(pattern, source)));
+	const excludeFiles = excludeFile.length === 0 ? includeFiles : includeFiles.filter(source => !excludeFile.some(pattern => match(pattern, source)));
+
+	return {
+		folders: excludeFolders,
+		files: excludeFiles
+	};
+}
+
 export function watchFile(filename: string, listener: () => void) {
 	return fs.watchFile(filename, listener);
 }
 
 export function unwatchFile(filename: string, listener: () => void) {
 	return fs.unwatchFile(filename, listener);
+}
+
+export function watch(filename: string, listener: (eventType: string, filename: string) => void, options: fs.WatchOptions = {
+	recursive: true
+}) {
+	const abortSignal = new AbortController();
+	options.signal = abortSignal.signal;
+	fs.watch(filename, options, listener);
+	return abortSignal;
 }

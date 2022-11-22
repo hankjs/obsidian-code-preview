@@ -23,12 +23,24 @@
             "id": "d6c8bae6a82dbfee",
             "type": "leaf",
             "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Example.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ec2bd157579c539a",
+            "type": "leaf",
+            "state": {
               "type": "empty",
               "state": {}
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -78,7 +90,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 224.5
   },
   "right": {
     "id": "21af6116f918f27a",
@@ -141,10 +153,10 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "d6c8bae6a82dbfee",
+  "active": "ea1c06973f0ed8d9",
   "lastOpenFiles": [
-    "Long.md",
     "Example.md",
+    "Long.md",
     "Test.md",
     "sub/Select Line.md",
     "Relative Path And Language.md",

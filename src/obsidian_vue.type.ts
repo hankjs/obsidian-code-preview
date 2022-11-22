@@ -9,6 +9,8 @@ export type Alias = string | {
 }
 
 export interface Settings {
+	watchAlias: boolean
+	watchCode: boolean
 	highLightColor: string;
 	alias: Record<string, Alias>;
 	include: string[];

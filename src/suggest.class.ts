@@ -34,7 +34,9 @@ export class Suggest extends EditorSuggest<PathSearch> {
 	}
 
 	onPathTrigger(cursor: EditorPosition, matches: RegExpMatchArray) {
-		const [origin, prefix, query] = matches;
+		const [origin, , query = ""] = matches;
+
+		console.log(query);
 
 		return {
 			start: {
@@ -80,9 +82,9 @@ export class Suggest extends EditorSuggest<PathSearch> {
 		const { settings: { alias }, includeFilePath } = useSettingStore();
 		const aliasKeys = Object.keys(alias);
 
-		let result: PathSearch[] = [];
+		const result: PathSearch[] = [];
 		const fuzzySearch = prepareFuzzySearch(context.query);
-		for (let item of aliasKeys) {
+		for (const item of aliasKeys) {
 			const match = fuzzySearch(item);
 			match && result.push({
 				match,
@@ -90,7 +92,7 @@ export class Suggest extends EditorSuggest<PathSearch> {
 			});
 		}
 
-		if (includeFilePath.length > 0) {
+		if (includeFilePath.size > 0) {
 			includeFilePath.forEach(item => {
 				const match = fuzzySearch(item);
 				match && result.push({
@@ -117,9 +119,8 @@ export class Suggest extends EditorSuggest<PathSearch> {
 		if (!aliasKey) {
 			return [];
 		}
-		const paths = new Set<string>();
 		const files = aliasFilePathMap.get(aliasKey);
-		files?.forEach((f) => paths.add(f));
+		const paths = new Set<string>(files);
 
 		if (paths.size === 0) {
 			return [];
