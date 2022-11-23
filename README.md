@@ -1,4 +1,4 @@
-## Obsidian Code Previews Plugin
+# Obsidian Code Previews Plugin
 
 [中文](./README.CN.md)
 
