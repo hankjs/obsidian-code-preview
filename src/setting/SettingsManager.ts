@@ -1,6 +1,6 @@
 import update, { Spec } from "immutability-helper";
 import { App, Setting } from "obsidian";
-import { APP_NAME, DEFAULT_SETTINGS } from "src/default_settings";
+import { DEFAULT_SETTINGS } from "src/default_settings";
 import { CodePreviewPlugin, Settings } from "src/obsidian_vue.type";
 import { SettingsManagerConfig } from "./Setting";
 
@@ -9,7 +9,7 @@ export class SettingsManager {
 	plugin: CodePreviewPlugin;
 	config: SettingsManagerConfig;
 	settings: Settings;
-	applyDebounceTimer: number = 0;
+	applyDebounceTimer = 0;
 
 	constructor(
 		plugin: CodePreviewPlugin,
@@ -48,6 +48,26 @@ export class SettingsManager {
 		});
 
 		new Setting(containerEl)
+			.setName("Watch alias folder change")
+			.addToggle(toggle =>
+				toggle
+					.setValue(this.plugin.settings.watchAlias)
+					.onChange((value) => {
+						this.plugin.settings.watchAlias = value;
+						this.plugin.saveSettings();
+					}));
+
+		new Setting(containerEl)
+			.setName("Watch preview file change")
+			.addToggle(toggle =>
+				toggle
+					.setValue(this.plugin.settings.watchCode)
+					.onChange((value) => {
+						this.plugin.settings.watchCode = value;
+						this.plugin.saveSettings();
+					}));
+
+		new Setting(containerEl)
 			.setName("Linenumber")
 			.addToggle(toggle =>
 				toggle
@@ -56,7 +76,6 @@ export class SettingsManager {
 						this.plugin.settings.linenumber = value;
 						this.plugin.saveSettings();
 					}));
-
 
 		new Setting(containerEl)
 			.setName("highLightColor")

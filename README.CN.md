@@ -223,10 +223,12 @@ highlight:
 
 |配置 |说明 |类型 |默认值|
 |---|---|---|---|
+| watchAlias | 监听Alias文件夹变化，更新输入提示。可能有性能问题 | boolean | false |
+| watchCode | 监听已经预览的代码文件，文件变更时更新渲染内容。可能有性能问题 | boolean | false |
 | highLightColor | 高亮背景色 | css color | #2d82cc20 |
 | include | 包含的路径，为空即包含全部 | `Array<string or RegExp>` |  [] |
 | exclude | 排除的路径 | `Array<string or RegExp>` |  ["node_modules", ".obsidian"] |
-| includeFile | 包含的文件, Required | `Array<string or RegExp>` |  ["/\\.js$/", "/\\.css$/"] |
+| includeFile | 包含的文件, Required | `Array<string or RegExp>` |  ["/\\.(j|t)s$/", "/\\.css$/"] |
 | excludeFile | 排除的文件 | `Array<string or RegExp>` |  [] |
 | alias | 路径映射 | string \| Alias |  code |
 | linenumber | 是否显示行号 | true or false | true |

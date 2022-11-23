@@ -225,6 +225,8 @@ highlight:
 
 | Config | Description | Type |Default|
 |---|---|---|---|
+| watchAlias | Listening Alias folder changes, update input suggest. May affect performance | boolean | false |
+| watchCode | Listen to the previewed code file and update the render when the file changes. May affect performance | boolean | false |
 | highLightColor | highlight background | css color | #2d82cc20 |
 | include | include path, Empty is All | `Array<string or RegExp>` |  [] |
 | exclude | exclude path | `Array<string or RegExp>` |  ["node_modules", ".obsidian"] |

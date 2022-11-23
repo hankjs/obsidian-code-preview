@@ -3,12 +3,12 @@ import { Settings } from "./obsidian_vue.type";
 export const APP_NAME = "Code Preview";
 
 export const DEFAULT_SETTINGS: Settings = {
-	watchAlias: true,
-	watchCode: true,
+	watchAlias: false,
+	watchCode: false,
 	highLightColor: "#2d82cc20",
 	include: [],
 	exclude: ["node_modules", ".obsidian"],
-	includeFile: ["/\\.js$/", "/\\.css$/"],
+	includeFile: ["/\\.(j|t)s$/", "/\\.css$/"],
 	excludeFile: [],
 	linenumber: true,
 	alias: {
