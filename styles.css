@@ -7,6 +7,10 @@ If your plugin does not need CSS, delete this file.
 
 */
 
+.block-language-preview code {
+	white-space: pre;
+}
+
 pre[class*=language-].code-block-pre__has-line_num {
 	padding-left: 3.5em;
 }

@@ -15,7 +15,7 @@ export const selectFileSync = async (path: string, start: number | string | RegE
 	const lines = content.split("\n");
 	const ret = lines;
 	let startIndex = isNumber(start) ? start - 1 : 0;
-	let endIndex = isNumber(end) ? end - 1 : lines.length - 2;
+	let endIndex = isNumber(end) ? end - 1 : lines.length - 1;
 	if (isString(start)) {
 		startIndex = lines.findIndex((line) => line.indexOf(start) > -1);
 	}
