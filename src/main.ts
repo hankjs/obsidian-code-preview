@@ -110,7 +110,11 @@ export default class CodePreviewPlugin extends SettingPlugin {
 				codeSetting?.language || codeSetting?.lang || extname(path);
 			result.code = await selectFileSync(filePath, codeSetting.start, codeSetting.end);
 			if (!result.code) {
-				result.code = `File: ${filePath} not created or empty.`;
+				if (codeSetting.start || codeSetting.end) {
+					result.code = `File: ${filePath} not match start or end`;
+				} else {
+					result.code = `File: ${filePath} not created or empty.`;
+				}
 				return result;
 			}
 			result.filePath = filePath;
