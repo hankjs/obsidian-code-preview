@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.5](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.4...1.3.5) (2022-12-04)
+
+
+### Bug Fixes
+
+* code last line render error ([b8697e9](https://github.com/zjhcn/obsidian-code-preview/commit/b8697e92f66a2d947fd3a43ea30b83332d4097c4))
+
 ### [1.3.4](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.3...1.3.4) (2022-12-04)
 
 
