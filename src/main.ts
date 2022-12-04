@@ -103,7 +103,6 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			// First line format syntax. Avoid parsing invalidation
 			source = source.replace(/^([^:]+):(.+)\n/, "$1: $2\n")
 			const codeSetting = parseYaml(source);
-			console.log("codeSetting", codeSetting);
 			if (codeSetting === source) {
 				result.code = `YAML: parse error.`;
 				return result;
