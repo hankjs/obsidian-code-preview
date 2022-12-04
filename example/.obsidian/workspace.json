@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "3f4528a60e0e4a0e",
+            "id": "4d5c53a7fd380837",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -136,8 +136,9 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "ea1c06973f0ed8d9",
+  "active": "4d5c53a7fd380837",
   "lastOpenFiles": [
+    "Untitled.md",
     "Example.md",
     "Long.md",
     "Test.md",

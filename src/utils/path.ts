@@ -32,10 +32,10 @@ export const resolve = (path: string, sourcePath?: string): string => {
 		return _path.normalize(path);
 	}
 	if (sourcePath != null) {
-		return `${vaultBasePath}${_path.dirname(sourcePath)}/${path}`;
+		return `${vaultBasePath}/${_path.dirname(sourcePath)}/${path}`;
 	}
 
-	return vaultBasePath + path;
+	return path.startsWith(vaultBasePath) ? path : `${vaultBasePath}/${path}`;
 };
 
 export function relative(path: string, sourcePath?: string) {

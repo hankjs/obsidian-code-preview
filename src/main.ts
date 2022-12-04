@@ -100,7 +100,14 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		};
 
 		try {
+			// First line format syntax. Avoid parsing invalidation
+			source = source.replace(/^([^:]+):(.+)\n/, "$1: $2\n")
 			const codeSetting = parseYaml(source);
+			console.log("codeSetting", codeSetting);
+			if (codeSetting === source) {
+				result.code = `YAML: parse error.`;
+				return result;
+			}
 			const path = codeSetting?.path || codeSetting?.link;
 			const filePath = resolve(path, sourcePath);
 
