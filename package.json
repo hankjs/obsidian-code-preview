@@ -1,13 +1,14 @@
 {
 	"name": "obsidian-code-preview",
-	"version": "1.3.1",
+	"version": "1.3.2",
 	"description": "This is a Espanso plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"test": "jest",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"release": "standard-version"
 	},
 	"keywords": [],
 	"author": "",
@@ -28,11 +29,15 @@
 		"eslint": "^8.26.0",
 		"jest": "^28.0.0",
 		"obsidian": "latest",
+		"standard-version": "^9.5.0",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
 	},
 	"dependencies": {
 		"immutability-helper": "^3.1.1",
 		"microdiff": "^1.3.0"
+	},
+	"standard-version": {
+		"t": ""
 	}
 }
