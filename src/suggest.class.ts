@@ -36,8 +36,6 @@ export class Suggest extends EditorSuggest<PathSearch> {
 	onPathTrigger(cursor: EditorPosition, matches: RegExpMatchArray) {
 		const [origin, , query = ""] = matches;
 
-		console.log(query);
-
 		return {
 			start: {
 				line: cursor.line,

@@ -93,7 +93,6 @@ export async function list(options: {
 	const { app } = useObsidianStore();
 	const { adapter } = app.vault;
 	const [first] = paths;
-	console.log("first", first);
 	if (!first.startsWith("./") && !first.startsWith("../")) {
 		paths = paths.map(p => relative(p));
 	}
