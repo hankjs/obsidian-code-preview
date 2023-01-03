@@ -91,6 +91,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 	 */
 	public async code(source: string, sourcePath?: string) {
 		const result = {
+			start: 1,
 			code: "",
 			language: "",
 			highlight: "",
@@ -123,6 +124,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 				}
 				return result;
 			}
+			result.start = codeSetting.start;
 			result.filePath = filePath;
 			result.highlight = String(codeSetting.highlight);
 			result.lines = result.code.split("\n");
@@ -140,7 +142,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 	}
 
 
-	addLineNumber(pre: HTMLElement, div: HTMLElement, lineSize: number) {
+	addLineNumber(pre: HTMLElement, div: HTMLElement, lineSize: number, start: number = 1) {
 		div.classList.add('code-block-wrap');
 		const codeEl = pre.querySelector("code");
 		if (!codeEl) {
@@ -151,7 +153,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		const line_number = createEl('span', {
 			cls: 'code-block-line_num-wrap',
 			attr: {
-				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize};`
+				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize}; counter-set: line-num ${start};`
 			}
 		});
 
@@ -235,7 +237,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 
 		const render = async () => {
 			el.empty();
-			const { code, language, lines, highlight, filePath, linenumber } = await this.code(source, sourcePath);
+			const { code, language, lines, highlight, filePath, linenumber, start } = await this.code(source, sourcePath);
 			await MarkdownRenderer.renderMarkdown(
 				wrapCodeBlock(language, code),
 				el,
@@ -246,7 +248,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 			if (!pre) {
 				return filePath;
 			}
-			linenumber && this.addLineNumber(pre, el, lines.length);
+			linenumber && this.addLineNumber(pre, el, lines.length, start);
 
 			highlight &&
 				this.addLineHighLight(
