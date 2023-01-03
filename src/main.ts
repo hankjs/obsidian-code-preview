@@ -153,7 +153,7 @@ export default class CodePreviewPlugin extends SettingPlugin {
 		const line_number = createEl('span', {
 			cls: 'code-block-line_num-wrap',
 			attr: {
-				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize}; counter-set: line-num ${start};`
+				style: `top: ${top}; line-height: ${lineHeight}; font-size: ${fontSize}; counter-set: line-num ${start - 1};`
 			}
 		});
 
