@@ -1,6 +1,8 @@
 
 ```preview
 path: three.js
+start: 3
+end: debugObject
 ```
 
 

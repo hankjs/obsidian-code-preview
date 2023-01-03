@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "96a74ba4106651f3",
+            "id": "d05ca119908cf3bf",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -18,21 +18,8 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "eff057c726463c77",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Preview 100+.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Preview 100+.md",
+                "file": "Example.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Preview 100+.md",
+                "file": "Example.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Preview 100+.md"
+                "file": "Example.md"
               }
             }
           }
@@ -149,10 +136,21 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "eff057c726463c77",
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "d05ca119908cf3bf",
   "lastOpenFiles": [
-    "Example.md",
+    "Preview 100+ 1.md",
     "Preview 100+.md",
+    "Example.md",
     "Untitled.md",
     "Long.md",
     "Test.md",
