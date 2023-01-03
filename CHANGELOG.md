@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.6](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.5...1.3.6) (2023-01-03)
+
+
+### Bug Fixes
+
+* linenumber start counting without following the configuration ([223c6f3](https://github.com/zjhcn/obsidian-code-preview/commit/223c6f349e62cc2c5e0a7bc514276b5a36aaa8ef))
+
 ### [1.3.5](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.4...1.3.5) (2022-12-04)
 
 
