@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-code-preview",
-	"version": "1.3.10",
+	"version": "1.3.11",
 	"description": "This is a Espanso plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
