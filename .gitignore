@@ -17,6 +17,7 @@ tsconfig.tsbuildinfo
 
 # obsidian
 main.js
+!example/.obsidian/plugins/dist/main.js
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
