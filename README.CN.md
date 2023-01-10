@@ -2,7 +2,7 @@
 
 ## 全部功能展示
 
-具体示例可以直接使用 `Open folder as  vault` 打开 [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.10/example-1.3.10.zip)。
+具体示例可以直接使用 `Open folder as  vault` 打开 [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.11/example-1.3.11.zip)。
 
 ### 路径
 
