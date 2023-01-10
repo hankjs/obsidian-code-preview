@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.8](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.7...1.3.8) (2023-01-10)
+
+
+### Bug Fixes
+
+* example main.js missing ([2606ff6](https://github.com/zjhcn/obsidian-code-preview/commit/2606ff60e829fb7426033db8dfcb25908dfd5ba0))
+
 ### [1.3.7](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.6...1.3.7) (2023-01-03)
 
 
