@@ -4,7 +4,7 @@
 
 ## Example
 
-Specific examples can be use `Open folder as  vault` open [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.9/example-1.3.9.zip).
+Specific examples can be use `Open folder as  vault` open [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.10/example-1.3.10.zip).
 
 ### Path
 
