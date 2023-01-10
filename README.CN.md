@@ -2,7 +2,7 @@
 
 ## 全部功能展示
 
-具体示例可以直接使用 `Open folder as  vault` 打开 [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.6/example.zip)。
+具体示例可以直接使用 `Open folder as  vault` 打开 [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.8/example-1.3.8.zip)。
 
 ### 路径
 
@@ -129,7 +129,7 @@ end: "+1"
 <pre><code>```preview
 path: /sub/color.css
 start: body
-end: dd\\d{2}
+end: /dd\d{2}/
 ```</code></pre>
 
 如果你不会正则，也可以直接使用文本搜索，例如：

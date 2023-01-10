@@ -4,7 +4,7 @@
 
 ## Example
 
-Specific examples can be use `Open folder as  vault` open [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.6/example.zip).
+Specific examples can be use `Open folder as  vault` open [example.zip](https://github.com/zjhcn/obsidian-code-preview/releases/download/1.3.8/example-1.3.8.zip).
 
 ### Path
 
@@ -131,7 +131,7 @@ end: "+1"
 <pre><code>```preview
 path: /sub/color.css
 start: body
-end: dd\\d{2}
+end: /dd\d{2}/
 ```</code></pre>
 
 If you don't know RegExp, just use text directly. like:
