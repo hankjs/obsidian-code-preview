@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.10](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.9...1.3.10) (2023-01-10)
+
+
+### Bug Fixes
+
+* git actions add example plugin files. ([ce18bad](https://github.com/zjhcn/obsidian-code-preview/commit/ce18badf320affc2bd5574d50bbb9ba9db52ceab))
+
 ### [1.3.9](https://github.com/zjhcn/obsidian-code-preview/compare/1.3.8...1.3.9) (2023-01-10)
 
 
